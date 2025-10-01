@@ -2,57 +2,18 @@
 <html lang="en" data-ready="0">
 
 <head>
-  <!-- 0) AUTH GUARD — FIRST in <head> on PROTECTED pages -->
-  <script>
-    (function () {
-      const PUBLIC_PAGES = ["index.html", "important-numbers.html", "privacy.html", "login.html", "register.html"];
-      const path = location.pathname.split("/").pop() || "index.html";
-      if (PUBLIC_PAGES.includes(path)) return; // no-op on public pages
-
-      // Hide immediately to avoid UI flash on protected pages
-      document.documentElement.style.visibility = "hidden";
-
-      const goLogin = () => {
-        location.href = "login.html?next=" + encodeURIComponent(location.href);
-      };
-
-      // Try Firebase; fall back to a temporary session flag if needed
-      (async () => {
-        try {
-          const { getAuth, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
-          const { auth } = await import("./firebase-init.js");
-          onAuthStateChanged(auth, (user) => {
-            if (!user) return goLogin();
-            document.documentElement.style.visibility = "";
-            document.documentElement.setAttribute("data-ready", "1");
-          });
-        } catch (e) {
-          const authed = sessionStorage.getItem("fs_logged_in") === "1"; // temporary fallback
-          if (!authed) return goLogin();
-          document.documentElement.style.visibility = "";
-          document.documentElement.setAttribute("data-ready", "1");
-        }
-      })();
-    })();
-  </script>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>3-Sides Planner — SUPPORT</title>
 
-  <!-- At the top of delete-account.html <body> or in <head> -->
-  <script type="module">
-    import './firebase-init.js'; // ensures app/auth/db are initialized
-  </script>
-    
   <!-- Require login for this page -->
   <meta name="auth" content="required">
 
   <!-- Favicons -->
-  <link rel="icon" type="image/svg+xml" sizes="any" href="/3-sides-planner.io/favicon.svg">
-  <link rel="icon" type="image/png" sizes="32x32" href="/3-sides-planner.io/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/3-sides-planner.io/favicon-16.png">
-  <link rel="apple-touch-icon" href="/3-sides-planner.io/icon-192.png"> <!-- iOS Home screen -->
+  <link rel="icon" type="image/svg+xml" sizes="any" href="/three-sides.io/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/three-sides.io/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/three-sides.io/favicon-16.png">
+  <link rel="apple-touch-icon" href="/three-sides.io/icon-192.png"> <!-- iOS Home screen -->
 
   <!-- 1) FOUC guard -->
   <style>
@@ -163,8 +124,8 @@
     font-size: 1rem;
     border: 2px solid #ccc;
     border-radius: 10px;
-    width: 100%;
-    max-width: 600px;
+    width: 90%;
+    max-width: 400px;
     box-sizing: border-box;
   }
 
@@ -285,6 +246,15 @@ ul#savedSupport {
   color: black !important;
 }
 
+.saved-wrapper {
+  padding: 1rem !important; 
+  max-width: 700px !important;
+  margin: auto !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important; /* 💥 centers child elements like your <ul> */
+}
 
 ul#savedSupport li {
   width: 90% !important;
@@ -293,7 +263,7 @@ ul#savedSupport li {
 }
 
 #savedSupport {
-  width: 92% !important;
+  width: 100% !important;
   max-width: 700px !important;
   margin: 0 auto !important;
 }
@@ -456,113 +426,6 @@ background-color: rgb(221, 151, 221);
   gap: 1rem;
   flex-wrap: wrap;
 }
-
-/* ================= register css add ons ================ */
-  .legal-footer {
-    text-align: center;
-    font-size: 0.9rem;
-    margin-top: 8px;
-    color: var(--text-color) !important; /* NEW: match theme text color */
-  }
-  .legal-footer a {
-    color: inherit;                 /* NEW: use same color as parent */
-    text-decoration: underline;
-  }
-
-  .three-d-title.white-title {
-      color: white !important;
-      padding: 2rem 2.5rem 0rem 1rem !important;
-      /* Add more right padding */
-    }
-
-    /* Center the whole form and let it breathe horizontally */
-#supportForm {
-  width: 100%;
-  max-width: 640px;          /* ← wider form area */
-  margin: 0 auto 1rem;       /* center the form block */
-  padding: 0 16px;           /* side padding so full-width inputs don’t hug edges */
-  box-sizing: border-box;
-}
-
-/* -------- top container for name/relationship/phone ------ */
-#supportForm input[type="text"],
-#supportForm input[type="tel"] {
-  display: block;
-  margin: 0.5rem auto;       /* keeps each field centered */
-  width: 100%;               /* fill the form width */
-  max-width: none;           /* ← remove the 400px cap */
-  padding: 12px 16px;        /* ↑ taller (vertical) & comfy (horizontal) */
-  font-size: 1rem;
-  border: 2px solid #ccc;
-  border-radius: 12px;
-  box-sizing: border-box;
-}
-
-/* Optional: make it scale beautifully on tiny phones and big screens */
-@media (min-width: 768px) {
-  #supportForm { max-width: 720px; }  /* a touch wider on tablets/desktop */
-}
-
-
-/* ================== containers for contacts under my support ================ */
-
-/* ---- Center the whole saved area and make uniform gutters ---- */
-.saved-wrapper{
-  max-width: 640px !important;          /* container width */
-  margin: 0 auto;            /* center the container */
-  padding: 0 16px;           /* left/right gutter */
-  box-sizing: border-box;
-}
-
-#savedSupport{
-  list-style: none;          /* no bullets */
-  margin: 0;
-  padding: 0;
-}
-
-/* Each item fills the container width uniformly */
-#savedSupport li{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-
-  width: 100%;               /* fill the saved-wrapper */
-  padding: 12px 16px;        /* inner left/right padding */
-  margin: 10px 0;            /* space between rows */
-
-  border-radius: 10px;
-  background: rgb(250, 230, 250) !important;
-  box-shadow: 0 3px 6px rgba(0,0,0,.15);
-  color: #000;
-  box-sizing: border-box;
-}
-
-/* Text stretches, button stays tight */
-#savedSupport li .support-text{
-  flex: 1 1 auto;
-  min-width: 0;              /* avoid overflow when names are long */
-}
-
-#savedSupport li .delete-button-inline{
-  flex: 0 0 auto;
-  margin: 0 0 0 12px !important;
-  line-height: 1;
-}
-
-
-
-/* tighten the top of the blue card */
-  .dreamy-box {
-    padding-top: 8px !important;   /* was 0.5rem+; reduce */
-    margin-top: 1.5rem !important; /* optional: bring the whole card up */
-  }
-
-  /* tighten the title spacing */
-  .three-d-title.white-title {
-    margin: 0 0 0.75rem 0 !important; /* kill default top margin */
-    padding: 6px 16px 0 12px !important; /* was 2rem top; much smaller now */
-  }
   </style>
   </head>
 <body>
@@ -580,26 +443,20 @@ background-color: rgb(221, 151, 221);
 
       <div class="feel-good-container">
         <button type="submit" class="icon-button">📎 Save</button>
+        <button type="button" id="printSupportButton"  class="icon-button">🖸️ Print</button>
       </div>
     </form>
 
     <div class="dreamy-box">
 
-      <h1 class="three-d-title white-title">🎌 My Support</h1>
-
-    <div class="saved-wrapper">
-        <ul id="savedSupport"></ul>
-      </div></div>
-
+   <p style="text-align: center; font-size: 1.5rem;">📋 My Saved Support List</p>
+<div class="saved-wrapper">
+  <ul id="savedSupport"></ul>
+</div>
+</div>
 <div style="text-align: center;">
   <a href="wellness.html" class="backToApp">← Back</a>
 </div>
-
-<!-- ADDED: minimal, visible Privacy link (no other layout changes) -->
-<div class="legal-footer" role="contentinfo">
-  View our <a href="privacy.html" rel="noopener">Privacy Policy</a>.
-</div>
-
   <footer class="bottom-nav">
     <a href="index.html" class="nav-icon">🏠<span>Home</span></a>
     <a href="toolkit-hub.html" class="nav-icon">🧰<span>Toolkit</span></a>
@@ -608,7 +465,6 @@ background-color: rgb(221, 151, 221);
     <a href="important-numbers.html" class="nav-icon">🆘<span>Help</span></a>
   </footer>
 
-  <!-- ================= page local script ================ -->
   <script type="module">
     // ----- Firebase (shared initializer) -----
     import { auth, db } from "./firebase-init.js";
@@ -618,46 +474,11 @@ background-color: rgb(221, 151, 221);
       query, orderBy, serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    /* =========================================================
-       Tiny toast UI (same look/behavior as Toolkit/Journal)
-    ========================================================= */
-    function ensureToastUI() {
-      if (!document.getElementById("toast-style")) {
-        const s = document.createElement("style");
-        s.id = "toast-style";
-        s.textContent = `
-            .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%) translateY(16px);
-              min-width:240px;max-width:92vw;padding:12px 16px;border-radius:12px;background:rgba(0,0,0,.85);
-              color:#fff;font-weight:600;font-size:14px;line-height:1.35;box-shadow:0 6px 20px rgba(0,0,0,.25);
-              opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;z-index:9999}
-            .toast.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
-            .toast .small{display:block;font-weight:500;opacity:.85;margin-top:4px}`;
-        document.head.appendChild(s);
-      }
-      if (!document.getElementById("appToast")) {
-        const d = document.createElement("div");
-        d.id = "appToast";
-        d.className = "toast";
-        d.role = "status";
-        d.setAttribute("aria-live", "polite");
-        document.body.appendChild(d);
-      }
-    }
-    function showToast(msg, sub = "") {
-      ensureToastUI();
-      const el = document.getElementById("appToast");
-      el.innerHTML = sub ? `${msg}<span class="small">${sub}</span>` : msg;
-      el.classList.add("show");
-      clearTimeout(showToast._t);
-      showToast._t = setTimeout(() => el.classList.remove("show"), 2400);
-    }
-
-    /* =========================================================
-       Helpers + Theme
-    ========================================================= */
+    // --------- small helpers ----------
     const $ = (id) => document.getElementById(id);
     const here = location.pathname.split("/").pop() || "support.html";
 
+    // Theme classes you support (used to cleanly swap classes)
     const THEME_CLASSES = [
       "theme-bingo", "theme-brady", "theme-peach", "theme-moonlight", "theme-shortcake",
       "theme-bubby-bear", "theme-bumblebee", "theme-dolphin", "theme-arcade",
@@ -676,63 +497,19 @@ background-color: rgb(221, 151, 221);
       try { localStorage.setItem("themeClass", next); } catch { }
     }
 
+    // Optimistic theme (avoid flash before Firestore returns)
     (function preloadTheme() {
       const cached = localStorage.getItem("themeClass");
       if (cached) applyThemeClass(cached);
     })();
 
-    // One-time chime unlock on first gesture (optional)
-    function enableSound() { new Audio("chime.mp3").play().catch(() => { }); }
-
-    /* =========================================================
-       Offline "pending" queue (localStorage, per-user)
-       - We DO NOT write to Firestore while offline
-       - We queue locally and upload once when back online
-    ========================================================= */
-    const pendingKey = (uid) => `support:pending:${uid}`;
-
-    function readPending(uid) {
-      try { return JSON.parse(localStorage.getItem(pendingKey(uid)) || "[]"); }
-      catch { return []; }
+    // One-time chime unlock on first gesture
+    function enableSound() {
+      const audio = new Audio("chime.mp3");
+      audio.play().catch(() => { });
     }
 
-    function pushPending(uid, item) {
-      const list = readPending(uid);
-      list.push({ ...item, _id: `support-${Date.now()}-${Math.random().toString(36).slice(2)}` });
-      try { localStorage.setItem(pendingKey(uid), JSON.stringify(list)); } catch { }
-    }
-
-    function clearPending(uid) {
-      try { localStorage.removeItem(pendingKey(uid)); } catch { }
-    }
-
-    async function uploadPending(uid) {
-      if (!uid || !navigator.onLine) return;
-      const list = readPending(uid);
-      if (!list.length) return;
-
-      for (const item of list) {
-        try {
-          await addDoc(collection(db, "users", uid, "support"), {
-            name: item.name || "",
-            relationship: item.relationship || "",
-            phone: item.phone || "",
-            createdAt: serverTimestamp()
-          });
-        } catch (e) {
-          // If anything fails, keep the rest for next time
-          console.warn("[support] pending upload failed for one item:", e);
-          // Don’t clear pending; we’ll retry later
-          return;
-        }
-      }
-      clearPending(uid);
-      showToast("All set", "Your offline items have synced.");
-    }
-
-    /* =========================================================
-       Render list
-    ========================================================= */
+    // --------- support list render ----------
     function renderSupport(snap) {
       const ul = $("savedSupport");
       if (!ul) return;
@@ -755,7 +532,11 @@ background-color: rgb(221, 151, 221);
         row.style.margin = "0 auto";
 
         const text = document.createElement("span");
-        const parts = [x.name || "", x.relationship ? `(${x.relationship})` : "", x.phone || ""].filter(Boolean);
+        const parts = [
+          x.name || "",
+          x.relationship ? `(${x.relationship})` : "",
+          x.phone || ""
+        ].filter(Boolean);
         text.textContent = parts.join(" ");
 
         const btn = document.createElement("button");
@@ -763,10 +544,6 @@ background-color: rgb(221, 151, 221);
         btn.className = "delete-button-inline";
         btn.setAttribute("aria-label", `Delete ${x.name || "support person"}`);
         btn.addEventListener("click", async () => {
-          if (!navigator.onLine) {
-            showToast("You’re offline", "Reconnect to delete from the cloud.");
-            return;
-          }
           try {
             await deleteDoc(doc(db, "users", auth.currentUser.uid, "support", id));
           } catch (e) {
@@ -781,9 +558,7 @@ background-color: rgb(221, 151, 221);
       });
     }
 
-    /* =========================================================
-       Save + print
-    ========================================================= */
+    // --------- save + print ----------
     async function handleSaveSupport(e) {
       e?.preventDefault?.();
       const name = $("name")?.value.trim() || "";
@@ -791,48 +566,34 @@ background-color: rgb(221, 151, 221);
       const phone = $("phone")?.value.trim() || "";
       if (!name && !relationship && !phone) return;
 
-      const uid = auth.currentUser?.uid;
-      if (!uid) return;
-
-      // Clear inputs regardless (so UI feels responsive)
-      if ($("name")) $("name").value = "";
-      if ($("relationship")) $("relationship").value = "";
-      if ($("phone")) $("phone").value = "";
-
-      if (!navigator.onLine) {
-        // Do NOT write to Firestore. Queue locally and notify.
-        pushPending(uid, { name, relationship, phone });
-        showToast("Pending — will save when online");
-        return;
-      }
-
       try {
-        await addDoc(collection(db, "users", uid, "support"), {
+        await addDoc(collection(db, "users", auth.currentUser.uid, "support"), {
           name, relationship, phone, createdAt: serverTimestamp()
         });
-        showToast("Saved");
+        if ($("name")) $("name").value = "";
+        if ($("relationship")) $("relationship").value = "";
+        if ($("phone")) $("phone").value = "";
       } catch (e) {
         alert("Save failed: " + (e.message || e));
       }
     }
 
-    function printSupportList() { window.print(); }
+    function printSupportList() {
+      // Simple and reliable
+      window.print();
+    }
 
-    /* =========================================================
-       Auth gate + live wiring
-    ========================================================= */
+    // --------- auth gate + live wiring ----------
     let stopTheme = null, stopSupport = null;
 
-    onAuthStateChanged(auth, async (user) => {
+    onAuthStateChanged(auth, (user) => {
+      // clear prior listeners on user changes
       try { stopTheme?.(); stopSupport?.(); } catch { }
 
       if (!user) {
         location.replace(`login.html?next=${encodeURIComponent(here)}`);
         return;
       }
-
-      // Try to immediately upload any pending items if we’re online
-      await uploadPending(user.uid);
 
       // Live theme from user doc
       const userRef = doc(db, "users", user.uid);
@@ -841,14 +602,17 @@ background-color: rgb(221, 151, 221);
         (snap) => {
           const theme = snap.exists() ? (snap.data().themeClass || "theme-original") : "theme-original";
           applyThemeClass(theme);
-          document.documentElement.classList.add("ready");
+          document.documentElement.classList.add("ready"); // reveal once we know the theme
         },
-        () => { applyThemeClass("theme-original"); document.documentElement.classList.add("ready"); }
+        () => {
+          applyThemeClass("theme-original");
+          document.documentElement.classList.add("ready");
+        }
       );
 
-      // Live support list (newest first)
+      // Live support list: users/{uid}/support (newest first)
       const q = query(collection(db, "users", user.uid, "support"), orderBy("createdAt", "desc"));
-      stopSupport = onSnapshot(q, renderSupport, (err) => console.error("[support] onSnapshot:", err));
+      stopSupport = onSnapshot(q, renderSupport, (err) => console.error("support onSnapshot:", err));
 
       // UI hooks
       $("supportForm")?.addEventListener("submit", handleSaveSupport);
@@ -858,19 +622,7 @@ background-color: rgb(221, 151, 221);
       document.addEventListener("click", enableSound, { once: true });
       document.addEventListener("touchstart", enableSound, { once: true });
     });
-
-    /* =========================================================
-       Connectivity hooks
-       - We keep navbar fully usable offline (no anchor blocking)
-       - On reconnect, upload any pending items once
-    ========================================================= */
-    window.addEventListener("online", async () => {
-      const uid = auth.currentUser?.uid;
-      if (!uid) return;
-      showToast("Back online", "Syncing any saved items…");
-      await uploadPending(uid);
-    });
-  </script>  
-
+  </script>
+  
 </body>
 </html>  
