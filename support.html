@@ -285,15 +285,6 @@ ul#savedSupport {
   color: black !important;
 }
 
-.saved-wrapper {
-  padding: 1rem !important; 
-  max-width: 700px !important;
-  margin: auto !important;
-  box-sizing: border-box !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important; /* 💥 centers child elements like your <ul> */
-}
 
 ul#savedSupport li {
   width: 90% !important;
@@ -511,6 +502,67 @@ background-color: rgb(221, 151, 221);
 @media (min-width: 768px) {
   #supportForm { max-width: 720px; }  /* a touch wider on tablets/desktop */
 }
+
+
+/* ================== containers for contacts under my support ================ */
+
+/* ---- Center the whole saved area and make uniform gutters ---- */
+.saved-wrapper{
+  max-width: 640px !important;          /* container width */
+  margin: 0 auto;            /* center the container */
+  padding: 0 16px;           /* left/right gutter */
+  box-sizing: border-box;
+}
+
+#savedSupport{
+  list-style: none;          /* no bullets */
+  margin: 0;
+  padding: 0;
+}
+
+/* Each item fills the container width uniformly */
+#savedSupport li{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  width: 100%;               /* fill the saved-wrapper */
+  padding: 12px 16px;        /* inner left/right padding */
+  margin: 10px 0;            /* space between rows */
+
+  border-radius: 10px;
+  background: rgb(250, 230, 250) !important;
+  box-shadow: 0 3px 6px rgba(0,0,0,.15);
+  color: #000;
+  box-sizing: border-box;
+}
+
+/* Text stretches, button stays tight */
+#savedSupport li .support-text{
+  flex: 1 1 auto;
+  min-width: 0;              /* avoid overflow when names are long */
+}
+
+#savedSupport li .delete-button-inline{
+  flex: 0 0 auto;
+  margin: 0 0 0 12px !important;
+  line-height: 1;
+}
+
+
+
+/* tighten the top of the blue card */
+  .dreamy-box {
+    padding-top: 8px !important;   /* was 0.5rem+; reduce */
+    margin-top: 1.5rem !important; /* optional: bring the whole card up */
+  }
+
+  /* tighten the title spacing */
+  .three-d-title.white-title {
+    margin: 0 0 0.75rem 0 !important; /* kill default top margin */
+    padding: 6px 16px 0 12px !important; /* was 2rem top; much smaller now */
+  }
   </style>
   </head>
 <body>
